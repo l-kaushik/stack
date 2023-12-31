@@ -3,6 +3,11 @@
 
 #include "Node.h"
 
+template <typename T>
+class Stack
+{
+private:
 
+};
 
 #endif
