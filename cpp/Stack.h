@@ -13,7 +13,9 @@ public:
     // constructor and destructor
     Stack();
     Stack(T value);
+    Stack(Stack &other);
     Stack(std::initializer_list<T> list);
+    ~Stack();
 
     // Functions
     void push(T value);
@@ -22,7 +24,7 @@ public:
     bool isEmpty();
 
     // Operator overloading
-    Stack &operator=(Stack &other);
+    Stack<T>& operator=(Stack<T> &other);
 };
 
 //< -------------------- METHOD DEFINITION -------------------->
@@ -33,6 +35,28 @@ Stack<T>::Stack() : top(nullptr) {}
 
 template <typename T>
 Stack<T>::Stack(T value) : top(new Node<T>(value)) {}
+
+template <typename T>
+Stack<T>::Stack(Stack &other)
+{
+    top = other;
+}
+
+template <typename T>
+Stack<T>::Stack(std::initializer_list<T> list)
+{
+    for(auto &value: list)
+    {
+        push(value);
+    }
+}
+
+template <typename T>
+Stack<T>::~Stack()
+{
+    while(!isEmpty())
+        pop();
+}
 
 // Functions
 template <typename T>
@@ -67,4 +91,21 @@ void Stack<T>::peek() { std::cout << top->getValue(); }
 
 template <typename T>
 bool Stack<T>::isEmpty() { return top == nullptr; }
+
+//operator overloading
+template <typename T>
+Stack<T>& Stack<T>::operator=(Stack<T> &other)
+{
+    delete top;
+    top = nullptr;
+
+    while(!other.isEmpty())
+    {
+        push(other.top->getValue());
+        other = other.top->getNextNode();       
+    }
+
+    return *this;
+}
+
 #endif

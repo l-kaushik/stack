@@ -1,13 +1,9 @@
 #include "Stack.h"
+#include "vector"
 
 int main()
 {
-    Stack<int> a(1);
-   a.push(2);
-   a.push(3);
-   a.push(4);
-   a.push(5);
-   a.push(6);
+    Stack<int> a({5,6,7,8,9});
 
    while(!a.isEmpty())
    {
