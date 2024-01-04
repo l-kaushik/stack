@@ -53,14 +53,17 @@ Node<T>::Node(T value, Node<T> *next)
 // copy contructor, copy assignment operator and destructor
 template <typename T>
 Node<T>::Node(const Node<T> &other)
-    : m_value(other.m_value), m_next(other.m_next)
-{}
+{
+    *this = other;
+}
 
 template <typename T>
 Node<T>& Node<T>::operator=(const Node<T> &other)
 {
-    this->m_value = other.m_value;
+    if(this == &other)
+        return *this;
 
+    this->m_value = other.m_value;
     delete m_next;
     m_next = nullptr;
     if(other.m_next)
@@ -71,7 +74,10 @@ Node<T>& Node<T>::operator=(const Node<T> &other)
 
 template <typename T>
 Node<T>::~Node()
-{}
+{
+    delete m_next;
+    m_next = nullptr;
+}
 
 // Getters
 template <typename T>
