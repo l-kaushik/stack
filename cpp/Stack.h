@@ -7,7 +7,7 @@ template <typename T>
 class Stack
 {
 private:
-    Node<T> *top{nullptr};
+    Node<T> *m_top{nullptr};
 
 public:
     // constructor and destructor
@@ -24,22 +24,22 @@ public:
     bool isEmpty();
 
     // Operator overloading
-    Stack<T>& operator=(Stack<T> &other);
+    Stack<T>& operator=(const Stack<T> &other);
 };
 
 //< -------------------- METHOD DEFINITION -------------------->
 
 // constructor and destructor
 template <typename T>
-Stack<T>::Stack() : top(nullptr) {}
+Stack<T>::Stack() : m_top(nullptr) {}
 
 template <typename T>
-Stack<T>::Stack(T value) : top(new Node<T>(value)) {}
+Stack<T>::Stack(T value) : m_top(new Node<T>(value)) {}
 
 template <typename T>
-Stack<T>::Stack(Stack &other)
+Stack<T>::Stack(Stack<T> &other)
 {
-    top = other;
+    *this = other;
 }
 
 template <typename T>
@@ -65,11 +65,11 @@ void Stack<T>::push(T value)
     if (!isEmpty())
     {
         Node<T> *temp = new Node<T>(value);
-        temp->setNextNode(top);
-        top = temp;
+        temp->setNextNode(m_top);
+        m_top = temp;
     }
     else
-        top = new Node<T>(value);
+        m_top = new Node<T>(value);
 }
 
 template <typename T>
@@ -80,29 +80,47 @@ void Stack<T>::pop()
         std::cout<<"Stack is already empty\n";
     }
     else{
-        Node<T> *temp = top;
-        top = top->getNextNode();
+        Node<T> *temp = m_top;
+        m_top = m_top->getNextNode();
+        temp->setNextNode(nullptr);
         delete temp;
     }
 }
 
 template <typename T>
-void Stack<T>::peek() { std::cout << top->getValue(); }
+void Stack<T>::peek() { std::cout << m_top->getValue(); }
 
 template <typename T>
-bool Stack<T>::isEmpty() { return top == nullptr; }
+bool Stack<T>::isEmpty() { return m_top == nullptr; }
 
 //operator overloading
 template <typename T>
-Stack<T>& Stack<T>::operator=(Stack<T> &other)
+Stack<T>& Stack<T>::operator=(const Stack<T> &other)
 {
-    delete top;
-    top = nullptr;
+    if(this == &other)
+        return *this;
 
-    while(!other.isEmpty())
+    delete m_top;
+    m_top = nullptr;
+
+    Node<T> *temp {other.m_top};
+    Node<T> *setNewNode {nullptr};
+
+    while(temp)
     {
-        push(other.top->getValue());
-        other = other.top->getNextNode();       
+        if(m_top == nullptr)
+        {
+            m_top = new Node(temp->getValue());
+            setNewNode = m_top;
+        }
+        else
+        {
+            Node<T> *newNode {new Node(temp->getValue())};
+            setNewNode->setNextNode(newNode);
+            setNewNode = newNode;
+        }
+
+        temp = temp->getNextNode();   
     }
 
     return *this;

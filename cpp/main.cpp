@@ -1,15 +1,17 @@
 #include "Stack.h"
-#include "vector"
+#include <string>
 
 int main()
 {
-    Stack<int> a({5,6,7,8,9});
+    Stack<std::string> a({"Hello","how","are","you","?"});
+    Stack<std::string> b(a);
+// TODO : implement clear();
 
-   while(!a.isEmpty())
+   while(!b.isEmpty())
    {
-        a.peek();
+        b.peek();
         std::cout<<'\n';
-        a.pop();
+        b.pop();
    }
     return 0;
 }
